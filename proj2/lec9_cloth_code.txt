@@ -1,0 +1,54 @@
+/*
+new_vel = vel //start with old vels
+
+// b/t i ropes
+for i in range(nx - 1): // horizontial
+  for j in range(ny):
+    e = p[i+1,j] - p[i,j]; // vector e
+    l = np.sqrt(e.dot(e)); // length
+    e = e/l; normalize
+    v1 = e.dot(v[i,j]); dot prod of vel
+    v2 = e.dot(v[i+1,j]); dor prod vel
+    f = -ks * (10-1) - kd * (v1-v2); rope forces
+    vn[i,j] += f * e * dt; new velocity
+    vn[i+1,j] -= f * e * dt; new velocity
+
+// b/t j ropes (or x axis)
+for i in range(nx):
+  for j in range(ny-1):
+    e = p[i,j+1] - p[i,j];
+    l = np.sqrt(e.dot(e));
+    e = e/l;
+    v1 = e.dot(v[i,j]);
+    v2 = e.dot(v[i,j+1]);
+    f = -ks * (10-1) - kd * (v1-v2);
+    vn[i,j] += f * e * dt;
+    vn[1,j+1] -= f * e * dt;
+    
+vn += [0,-0.1,0]; // gravity
+vn[0,:] = 0;  // fixed top row
+v = vn;  // update vel
+p += v * dt; // update pos
+
+
+
+// collision detection
+for i in range(nx):
+  for j in range(ny):
+  d = SpherePos.distTo(p[i,j]);
+  if (d < sphereR + 0.09) {
+    n = -1 * (SpherePos - p[i,j]);
+    n.normalize();
+    n = [n[0],n[1],n[2]]; list of x,y,z values
+    bounce = np.multiply(np.dot(v[i,j],n),n);
+    v[i,j] -= 1.5 * bounce;
+    p[i,j] += np.multiply(0.1 + sphereR - d, n)
+  }
+  
+  
+Aero dynamic forces
+n = (r2-r1).crossProduct(r3-r1)
+v.mag()^2 *a * n = ((v.mag() * (v.dot(n))) / 2*n.mag()) * n
+f_aero = -0.5 * p * v.mag()^2 *a * n
+
+*/
